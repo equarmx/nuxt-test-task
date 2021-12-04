@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="card-image">
-      <div class="card-delete">
+      <div class="card-delete" :class="{visible: isMobile}">
         <img src="~/assets/images/delete.svg">
       </div>
       <img src="~/assets/images/itemImg.jpg" style="max-width: 332px">
@@ -22,7 +22,15 @@
 
 <script>
 export default {
-  name: "ItemCard"
+  name: "ItemCard",
+  data() {
+    return {
+      isMobile: false,
+    }
+  },
+  created() {
+    this.isMobile = this.$device.isMobile
+  }
 }
 </script>
 
@@ -70,6 +78,9 @@ export default {
         opacity: 0;
         transition: opacity 0.5s ease-in-out;
       }
+      .visible {
+        opacity: 1;
+      }
     }
 
     .card-info {
@@ -83,7 +94,7 @@ export default {
         padding-bottom: 16px;
         font-style: normal;
         font-weight: 600;
-        font-size: 20px;
+        font-size: 1.4em;
         line-height: 25px;
         color: #3F3F3F;
         opacity: 0.9;
@@ -98,14 +109,14 @@ export default {
         &__description {
           font-style: normal;
           font-weight: normal;
-          font-size: 16px;
+          font-size: 1.13em;
           line-height: 20px;
           color: #3F3F3F;
         }
         &__price {
           font-style: normal;
           font-weight: 600;
-          font-size: 24px;
+          font-size: 1.7em;
           line-height: 30px;
           color: #3F3F3F;
           margin: 0;

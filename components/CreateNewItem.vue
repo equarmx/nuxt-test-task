@@ -1,81 +1,99 @@
 <template>
-  <div class="wrapper">
-    <form class="wrapper-content">
-      <div class="wrapper-content-item">
-        <div class="wrapper-content-item-header">
+  <div class="wrapper" :class="{wrapperMobile: isMobile}">
+      <form class="wrapper-content">
+        <div class="wrapper-content-item">
+          <div class="wrapper-content-item-header">
           <span class="wrapper-content-item-header__title">
             Наименование товара
           </span>
-          <img src="~/assets/images/Rectangle_32.svg" alt="*" style="color: red">
-        </div>
+            <img src="~/assets/images/Rectangle_32.svg" alt="*" style="color: red">
+          </div>
 
-        <div class="wrapper-content-item-input-wrapper">
-          <input
-            class="wrapper-content-item-input-wrapper__input"
-            placeholder="Введите наименование товара"
-          >
+          <div class="wrapper-content-item-input-wrapper">
+            <input
+              class="wrapper-content-item-input-wrapper__input"
+              placeholder="Введите наименование товара"
+            >
+          </div>
         </div>
-      </div>
-      <div class="wrapper-content-item">
-        <div class="wrapper-content-item-header">
+        <div class="wrapper-content-item">
+          <div class="wrapper-content-item-header">
           <span class="wrapper-content-item-header__title">
             Описание товара
           </span>
-        </div>
+          </div>
 
-        <div class="wrapper-content-item-input-wrapper">
+          <div class="wrapper-content-item-input-wrapper">
           <textarea
             class="wrapper-content-item-input-wrapper__textarea"
             placeholder="Введите описание товара"
           ></textarea>
+          </div>
         </div>
-      </div>
-      <div class="wrapper-content-item">
-        <div class="wrapper-content-item-header">
+        <div class="wrapper-content-item">
+          <div class="wrapper-content-item-header">
           <span class="wrapper-content-item-header__title">
             Ссылка на изображение товара
           </span>
-          <img src="~/assets/images/Rectangle_32.svg" alt="*" style="color: red">
-        </div>
+            <img src="~/assets/images/Rectangle_32.svg" alt="*" style="color: red">
+          </div>
 
-        <div class="wrapper-content-item-input-wrapper">
-          <input
-            class="wrapper-content-item-input-wrapper__input"
-            placeholder="Введите ссылку"
-          >
+          <div class="wrapper-content-item-input-wrapper">
+            <input
+              class="wrapper-content-item-input-wrapper__input"
+              placeholder="Введите ссылку"
+            >
+          </div>
         </div>
-      </div>
-      <div class="wrapper-content-item">
-        <div class="wrapper-content-item-header">
+        <div class="wrapper-content-item">
+          <div class="wrapper-content-item-header">
           <span class="wrapper-content-item-header__title">
             Цена товара
           </span>
-          <img src="~/assets/images/Rectangle_32.svg" alt="*" style="color: red">
-        </div>
+            <img src="~/assets/images/Rectangle_32.svg" alt="*" style="color: red">
+          </div>
 
-        <div class="wrapper-content-item-input-wrapper">
-          <input
-            class="wrapper-content-item-input-wrapper__input"
-            placeholder="Введите цену"
-          >
+          <div class="wrapper-content-item-input-wrapper">
+            <input
+              class="wrapper-content-item-input-wrapper__input"
+              placeholder="Введите цену"
+            >
+          </div>
         </div>
-      </div>
-      <div class="wrapper-content-bottom">
-        <button class="wrapper-content-bottom-btn">
-          Добавить товар
-        </button>
-      </div>
-    </form>
-  </div>
+        <div class="wrapper-content-bottom" :class="{mobileStructure: isMobile}">
+          <button
+            v-if="isMobile"
+            @click="$emit('close')"
+            class="wrapper-content-bottom__close"
+          >
+            Закрыть
+          </button>
+          <button class="wrapper-content-bottom__btn" :class="{widthBtn: isMobile}">
+            Добавить товар
+          </button>
+        </div>
+      </form>
+    </div>
 </template>
 
 <script>
 export default {
-  name: "createNewItem"
+  name: "createNewItem",
+  data() {
+    return {
+      isMobile: false,
+    }
+  },
+  created() {
+    this.isMobile = this.$device.isMobile
+  }
 }
 </script>
 
 <style scoped lang="scss">
+.wrapperMobile {
+  margin: 0 auto;
+}
 .wrapper {
   max-width: 332px;
   min-width: 200px;
@@ -87,7 +105,7 @@ export default {
   font-style: normal;
   font-weight: normal;
   letter-spacing: -0.02em;
-  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.04), 0px 6px 10px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.04), 0 6px 10px rgba(0, 0, 0, 0.02);
   border-radius: 4px;
 
   .wrapper-content {
@@ -100,24 +118,44 @@ export default {
       display: flex;
       justify-content: center;
 
-      .wrapper-content-bottom-btn {
+      &__close {
+        height: 36px;
+        background: #FF8484;
+        border-radius: 10px;
+        border: 1px solid #FFFEFB;
+        outline: none;
+        font-size: 0.9rem;
+        color: white;
+        opacity: 1;
+      }
+
+      &__btn {
         width: 100%;
         height: 36px;
         background: #EEEEEE;
         border-radius: 10px;
         border: 1px solid #FFFEFB;
         outline: none;
-        font-size: 12px;
+        font-size: 0.9rem;
         color: #B4B4B4;
         opacity: 1;
       }
+      .widthBtn {
+        width: unset;
+      }
+    }
+
+    .mobileStructure {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .wrapper-content-item {
       display: flex;
       flex-direction: column;
       row-gap: 4px;
-      padding-bottom: 16px;
+      padding-bottom: 1.15rem;
 
       .wrapper-content-item-header {
         display: flex;
@@ -128,7 +166,7 @@ export default {
       }
       .wrapper-content-item-input-wrapper {
         max-width: 284px;
-        font-size: 12px;
+        font-size: 0.85rem;
 
         input {
           box-sizing: border-box;
@@ -138,7 +176,7 @@ export default {
           border: 1px solid #FFFEFB;
           box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
           border-radius: 4px;
-          text-indent: 16px;
+          text-indent: 1.15rem;
           outline: none;
           transition: background 0.25s ease-in-out, border-bottom 0.25s ease-in-out;
           line-height: 15px;
@@ -149,7 +187,7 @@ export default {
           }
 
           &::placeholder {
-            font-size: 12px;
+            font-size: 0.85rem;
             color: #B4B4B4;
             opacity: 1;
             padding-top: 10px;
@@ -157,12 +195,12 @@ export default {
 
           &:-ms-input-placeholder {
             color: #B4B4B4;
-            font-size: 12px;
+            font-size: 0.85rem;
           }
 
           &::-ms-input-placeholder {
             color: #B4B4B4;
-            font-size: 12px;
+            font-size: 0.85rem;
           }
         }
         textarea {
@@ -186,17 +224,17 @@ export default {
             border-bottom: 1px solid lightblue;
           }
           &::placeholder {
-            font-size: 12px;
+            font-size: 0.85rem;
             color: #B4B4B4;
             opacity: 1;
           }
           &:-ms-input-placeholder {
-            font-size: 12px;
+            font-size: 0.85rem;
             color: #B4B4B4;
           }
 
           &::-ms-input-placeholder {
-            font-size: 12px;
+            font-size: 0.85rem;
             color: #B4B4B4;
           }
         }

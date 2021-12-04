@@ -70,24 +70,24 @@ export default {
     border-radius: 4px;
     box-sizing: border-box;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 0.85em;
     line-height: 15px;
     color: #B4B4B4;
-    z-index: 102;
+    z-index: 120;
 
     .wrapper-header-selector-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       height: 100%;
-      padding-left: 8px;
+      padding-left: 0.7em;
 
       &__arrow {
          display: flex;
          flex-shrink: 0;
          align-items: center;
          justify-content: center;
-         padding-right: 8px;
+         padding-right: 0.7em;
         transition: transform 0.25s ease-in-out;
        }
       .showed {
@@ -112,10 +112,11 @@ export default {
       background: #FFFEFB;
       border-top: 0;
       display: none;
+      z-index: 9999;
 
       &__item {
          cursor: pointer;
-         padding: 8px;
+         padding: 0.7em;
 
         &:hover {
            background: darken(#FFFEFB, 5%);
