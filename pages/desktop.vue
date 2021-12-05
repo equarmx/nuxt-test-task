@@ -12,8 +12,9 @@
       </div>
       <div class="wrapper-content__listItems">
         <item-card
-          v-for="item in 30"
-          :key="item"
+          v-for="item in $store.state.listItems"
+          :key="item.id"
+          :productData="item"
         />
       </div>
     </div>
@@ -25,13 +26,57 @@ import CreateNewItem from "../components/CreateNewItem";
 import Selector from "../components/Selector.vue";
 import ItemCard from "../components/ItemCard";
 
+function SetStartList(name, id, description, src, price) {
+  this.name = name;
+  this.id = id;
+  this.description = description;
+  this.src = src;
+  this.price = price.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+}
+
 export default {
   name: "desktop.vue",
   components: {
     ItemCard,
     CreateNewItem,
     Selector,
-  }
+  },
+  mounted() {
+    let arr = []
+    for (let i = 0; i < 30; i++) {
+      arr.push(new SetStartList(
+        'Наименование товара',
+        i+1,
+        'Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк',
+        'itemImg.jpg',
+        '10000',
+      ))
+    }
+    /* Для проверки фильтрации элементов по указанным фильтрам */
+    arr.push(new SetStartList(
+      'Алфавит',
+      31,
+      'Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк',
+      'itemImg.jpg',
+      '100',
+    ))
+    arr.push(new SetStartList(
+      'Язва',
+      32,
+      'Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк',
+      'itemImg.jpg',
+      '100000000',
+    ))
+    arr.push(new SetStartList(
+      'Брехня',
+      33,
+      'Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк',
+      'itemImg.jpg',
+      '1000',
+    ))
+
+    this.$store.dispatch('callSetListItems', arr)
+  },
 }
 </script>
 

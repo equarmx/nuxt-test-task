@@ -4,17 +4,17 @@
       <div class="card-delete" :class="{visible: isMobile}">
         <img src="~/assets/images/delete.svg">
       </div>
-      <img src="~/assets/images/itemImg.jpg" style="max-width: 332px">
+      <img :src="require(`~/assets/images/${productData.src}`)">
     </div>
     <div class="card-info">
       <h3 class="card-info__title">
-        Наименование товара
+        {{ productData.name }}
       </h3>
       <div class="card-info-block">
       <span class="card-info-block__description">
-        Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк
+        {{ productData.description }}
       </span>
-        <h2 class="card-info-block__price">10 000 руб.</h2>
+        <h2 class="card-info-block__price">{{ productData.price }} руб.</h2>
       </div>
     </div>
   </div>
@@ -23,6 +23,12 @@
 <script>
 export default {
   name: "ItemCard",
+  props: {
+    productData: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data() {
     return {
       isMobile: false,
@@ -30,7 +36,7 @@ export default {
   },
   created() {
     this.isMobile = this.$device.isMobile
-  }
+  },
 }
 </script>
 

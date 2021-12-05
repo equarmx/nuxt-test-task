@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper-header-selector" :class="{activeHeader: show}">
     <div class="wrapper-header-selector-header" @click.prevent="onShow">
-      <span class="wrapper-header-selector-header__current">{{ selectedItem.name }}</span>
+      <span class="wrapper-header-selector-header__current">{{ $store.state.selected.name }}</span>
       <img
         src="~/assets/images/Rectangle_33.svg" class="wrapper-header-selector-header__arrow"
         :class="{showed: show}"
@@ -10,8 +10,8 @@
     <div class="wrapper-header-selector-items" :class="{active: show}">
       <div
         class="wrapper-header-selector-items__item"
-        v-for="(item, index) in listItems"
-        :key="index"
+        v-for="(item, i) in listItems"
+        :key="i"
         @click.prevent="onSelect(item)"
       >
         {{ item.name }}
@@ -24,10 +24,6 @@
 export default {
   name: "Selector",
   data: () => ({
-    selectedItem: {
-      value: 'default',
-      name: 'По умолчанию',
-    },
     show: false,
     listItems: [
       {
@@ -48,12 +44,19 @@ export default {
       },
     ],
   }),
+  mounted() {
+    this.$store.dispatch('callSetSelected', {
+      value: 'default',
+      name: 'По умолчанию',
+    })
+  },
   methods: {
     onShow() {
       this.show = !this.show
     },
     onSelect(item) {
-      this.selectedItem = Object.assign({}, item)
+      this.$store.dispatch('callSetSelected', item)
+      // this.selectedItem = Object.assign({}, item)
     }
   }
 }

@@ -16,7 +16,7 @@ export default {
   },
   created() {
     this.component = this.$device.isMobile ? 'Mobile' : 'Desktop'
-  }
+  },
 }
 </script>
 
