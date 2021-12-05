@@ -34,8 +34,9 @@
       </div>
       <div class="wrapper-content__listItems">
         <ItemCard
-          v-for="item in 30"
-          :key="item"
+          v-for="item in $store.state.listItems"
+          :key="item.id"
+          :productData="item"
         />
       </div>
     </div>
@@ -54,6 +55,9 @@ export default {
     return {
       showModal: false,
     }
+  },
+  mounted() {
+    this.$store.dispatch('callSetListItems')
   },
 }
 </script>

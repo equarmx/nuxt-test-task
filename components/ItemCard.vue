@@ -4,7 +4,18 @@
       <div class="card-delete" :class="{visible: isMobile}">
         <img src="~/assets/images/delete.svg">
       </div>
-      <img :src="require(`~/assets/images/${productData.src}`)">
+      <img
+        v-if="productData.src === 'itemImg.jpg'"
+        :src="require(`~/assets/images/${productData.src}`)"
+      >
+      <img
+        v-else-if="!productData.src"
+        :src="require(`~/assets/images/default.jpg`)"
+      >
+      <img
+        v-else
+        :src="`${productData.src}`"
+      >
     </div>
     <div class="card-info">
       <h3 class="card-info__title">

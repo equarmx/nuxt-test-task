@@ -13,6 +13,7 @@
             <input
               class="wrapper-content-item-input-wrapper__input"
               placeholder="Введите наименование товара"
+              v-model="newItem.name"
             >
           </div>
         </div>
@@ -22,11 +23,11 @@
             Описание товара
           </span>
           </div>
-
           <div class="wrapper-content-item-input-wrapper">
           <textarea
             class="wrapper-content-item-input-wrapper__textarea"
             placeholder="Введите описание товара"
+            v-model="newItem.description"
           ></textarea>
           </div>
         </div>
@@ -37,11 +38,11 @@
           </span>
             <img src="~/assets/images/Rectangle_32.svg" alt="*" style="color: red">
           </div>
-
           <div class="wrapper-content-item-input-wrapper">
             <input
               class="wrapper-content-item-input-wrapper__input"
               placeholder="Введите ссылку"
+              v-model="newItem.src"
             >
           </div>
         </div>
@@ -52,11 +53,11 @@
           </span>
             <img src="~/assets/images/Rectangle_32.svg" alt="*" style="color: red">
           </div>
-
           <div class="wrapper-content-item-input-wrapper">
             <input
               class="wrapper-content-item-input-wrapper__input"
               placeholder="Введите цену"
+              v-model="newItem.price"
             >
           </div>
         </div>
@@ -68,7 +69,11 @@
           >
             Закрыть
           </button>
-          <button class="wrapper-content-bottom__btn" :class="{widthBtn: isMobile}">
+          <button
+            class="wrapper-content-bottom__btn"
+            :class="{widthBtn: isMobile}"
+            @click.prevent="onSubmit()"
+          >
             Добавить товар
           </button>
         </div>
@@ -82,11 +87,25 @@ export default {
   data() {
     return {
       isMobile: false,
+      newItem: {
+        name: '',
+        description: '',
+        src: '',
+        price: '',
+      },
     }
   },
   created() {
     this.isMobile = this.$device.isMobile
-  }
+  },
+  methods: {
+    onSubmit() {
+      this.$store.dispatch('callCreateNewElem', this.newItem)
+      for (let key in this.newItem) {
+        this.newItem[key] = ''
+      }
+    }
+  },
 }
 </script>
 
