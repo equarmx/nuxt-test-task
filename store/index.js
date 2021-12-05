@@ -1,16 +1,20 @@
-function SetStartList(name, id, description, src, price, first) {
+import animation from "ant-design-vue/lib/_util/openAnimation";
+
+function SetStartList(name, id, description, src, price, first, animation) {
   this.name = name;
   this.id = id;
   this.description = description;
   this.src = src;
   this.price = price.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   this.first = first;
+  this.animation = animation
 }
 
 export const state = () => ({
   listItems: [],
   selected: {},
   numOfCreated: 0,
+  deleteAnimation: false,
 })
 
 export const mutations = {
@@ -47,6 +51,7 @@ export const mutations = {
         'itemImg.jpg',
         '10000',
         0,
+        false,
       ))
     }
     /* Для проверки фильтрации элементов по указанным фильтрам */
@@ -57,6 +62,7 @@ export const mutations = {
       'itemImg.jpg',
       '100',
       0,
+      false,
     ))
     state.listItems.push(new SetStartList(
       'Язва',
@@ -65,6 +71,7 @@ export const mutations = {
       'itemImg.jpg',
       '100000000',
       0,
+      false,
     ))
     state.listItems.push(new SetStartList(
       'Брехня',
@@ -73,6 +80,7 @@ export const mutations = {
       'itemImg.jpg',
       '1000',
       0,
+      false,
     ))
   },
   createNewElem(state, obj) {
@@ -83,7 +91,8 @@ export const mutations = {
       obj.description,
       obj.src,
       obj.price,
-      number.toString()
+      number.toString(),
+      false,
     ))
   },
   sortedWhenCreate(state) {
@@ -92,7 +101,19 @@ export const mutations = {
       else if (a.first > b.first) return -1
       else return 0
     })
-  }
+  },
+  deleteElement(state, id) {
+    let index = state.listItems.findIndex(i => {
+      return i.id === id
+    })
+    if (index !== -1) state.listItems.splice(index, 1)
+  },
+  addDeleteAnimation(state, id) {
+    let index = state.listItems.findIndex(i => {
+      return i.id === id
+    })
+    state.listItems[index].animation = true
+  },
 }
 
 export const actions = {
@@ -106,5 +127,11 @@ export const actions = {
   callCreateNewElem({commit}, obj) {
     commit('createNewElem', obj)
     commit('sortedWhenCreate')
-  }
+  },
+  callDeleteElement({commit}, id) {
+    commit('addDeleteAnimation', id)
+    setTimeout(() => {
+        commit('deleteElement', id)
+    }, 400)
+  },
 }

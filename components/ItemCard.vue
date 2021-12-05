@@ -1,7 +1,7 @@
 <template>
-  <div class="card">
+  <div class="card" :class="{removed: productData.animation}">
     <div class="card-image">
-      <div class="card-delete" :class="{visible: isMobile}">
+      <div class="card-delete" :class="{visible: isMobile}" @click.prevent="deleteItem(productData.id)">
         <img src="~/assets/images/delete.svg">
       </div>
       <img
@@ -48,6 +48,11 @@ export default {
   created() {
     this.isMobile = this.$device.isMobile
   },
+  methods: {
+    deleteItem(id) {
+      this.$store.dispatch('callDeleteElement', id)
+    },
+  },
 }
 </script>
 
@@ -62,6 +67,8 @@ export default {
     display: flex;
     flex-direction: column;
     cursor: pointer;
+    opacity: 1;
+    transition: opacity 250ms ease-in-out;
 
     &:hover {
       background: hsla(0, 0%, 100%, .92);
@@ -140,5 +147,8 @@ export default {
         }
       }
     }
+  }
+  .removed {
+    opacity: 0;
   }
 </style>
