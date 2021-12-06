@@ -1,6 +1,12 @@
 <template>
   <div class="wrapper" :class="{wrapperMobile: isMobile}">
-      <form class="wrapper-content">
+      <form
+        class="wrapper-content"
+        action="#"
+        method="post"
+        enctype="multipart/form-data"
+        @submit.prevent="onSubmit"
+      >
         <div class="wrapper-content-item">
           <div class="wrapper-content-item-header">
           <span class="wrapper-content-item-header__title">
@@ -13,7 +19,8 @@
             <input
               class="wrapper-content-item-input-wrapper__input"
               placeholder="Введите наименование товара"
-              v-model="newItem.name"
+              v-model.trim="newItem.name"
+              :class="{invalid: $v.name.$dirty && (!$v.name.required || !$v.name.maxLength)}"
             >
           </div>
         </div>
@@ -27,7 +34,7 @@
           <textarea
             class="wrapper-content-item-input-wrapper__textarea"
             placeholder="Введите описание товара"
-            v-model="newItem.description"
+            v-model.trim="newItem.description"
           ></textarea>
           </div>
         </div>
@@ -42,7 +49,8 @@
             <input
               class="wrapper-content-item-input-wrapper__input"
               placeholder="Введите ссылку"
-              v-model="newItem.src"
+              v-model.trim="newItem.src"
+              :class="{invalid: $v.src.$dirty && (!$v.src.required || !$v.src.maxLength)}"
             >
           </div>
         </div>
@@ -57,7 +65,7 @@
             <input
               class="wrapper-content-item-input-wrapper__input"
               placeholder="Введите цену"
-              v-model="newItem.price"
+              v-model.trim="newItem.price"
             >
           </div>
         </div>
@@ -72,8 +80,9 @@
           <button
             class="wrapper-content-bottom__btn"
             :class="{widthBtn: isMobile}"
-            @click.prevent="onSubmit()"
+            type="submit"
           >
+<!--            @click.prevent="onSubmit()"-->
             Добавить товар
           </button>
         </div>
@@ -82,8 +91,18 @@
 </template>
 
 <script>
+import {required, maxLength} from "vuelidate/lib/validators"
+
+const isNumber = (value) => /^\+?[0-9]+$/.test(value);
+const isURL = (value) => /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g.test(value);
+
 export default {
   name: "createNewItem",
+  validations: {
+    name: {required, maxLength: maxLength(25)},
+    src: {required, url: isURL()},
+    price:{required, maxLength: maxLength(25), number: isNumber()},
+  },
   data() {
     return {
       isMobile: false,
@@ -100,6 +119,10 @@ export default {
   },
   methods: {
     onSubmit() {
+      if (this.$v.$invalid) {
+        this.$v.$touch()
+        return
+      }
       this.$store.dispatch('callCreateNewElem', this.newItem)
       for (let key in this.newItem) {
         this.newItem[key] = ''
@@ -185,6 +208,10 @@ export default {
       .wrapper-content-item-input-wrapper {
         max-width: 284px;
         font-size: 0.85rem;
+
+        .invalid {
+          border-color:  #FF8484;
+        }
 
         input {
           box-sizing: border-box;
