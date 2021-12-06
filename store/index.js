@@ -19,24 +19,40 @@ export const mutations = {
     state.selected = obj
   },
   sortListItems(state, value) {
-    state.listItems.sort((a, b)=> {
-      if (value === 'default') {
-        if (a.id > b.id) return 1
-        else if (a.id < b.id) return -1
-        else return 0
-      } else if (value === 'min') {
-        if (Number(a.price.replace(/\s/g, "")) > Number(b.price.replace(/\s/g, ""))) return 1
-        else if (Number(a.price.replace(/\s/g, "")) < Number(b.price.replace(/\s/g, ""))) return -1
-        else return 0
-      } else if (value === 'max') {
-        if (Number(a.price.replace(/\s/g, "")) < Number(b.price.replace(/\s/g, ""))) return 1
-        else if (Number(a.price.replace(/\s/g, "")) > Number(b.price.replace(/\s/g, ""))) return -1
-        else return 0
-      } else if (value === 'byName') {
-        let collator = new Intl.Collator(['ru', 'en']);
-        return collator.compare(a.name.toLowerCase(), b.name.toLowerCase())
-      }
-    })
+    if (process.client) {
+      state.listItems.sort((a, b)=> {
+        if (value === 'default') {
+          if (a.first !== 0 && b.first !== 0) {
+            if (a.first === b.first) {
+              if (a.id > b.id) return -1
+              else if (a.id < b.id) return 1
+            }
+            if (a.first < b.first) return 1
+            else if (a.first > b.first) return -1
+            else return 0
+          } else if (a.first !== 0 || b.first !== 0) {
+            if (a.first < b.first) return 1
+            else if (a.first > b.first) return -1
+            else return 0
+          } else {
+            if (a.id > b.id) return 1
+            else if (a.id < b.id) return -1
+            else return 0
+          }
+        } else if (value === 'min') {
+          if (Number(a.price.replace(/\s/g, "")) > Number(b.price.replace(/\s/g, ""))) return 1
+          else if (Number(a.price.replace(/\s/g, "")) < Number(b.price.replace(/\s/g, ""))) return -1
+          else return 0
+        } else if (value === 'max') {
+          if (Number(a.price.replace(/\s/g, "")) < Number(b.price.replace(/\s/g, ""))) return 1
+          else if (Number(a.price.replace(/\s/g, "")) > Number(b.price.replace(/\s/g, ""))) return -1
+          else return 0
+        } else if (value === 'byName') {
+          let collator = new Intl.Collator(['ru', 'en']);
+          return collator.compare(a.name.toLowerCase(), b.name.toLowerCase())
+        }
+      })
+    }
   },
   setListItems(state) {
     // let arr = []
@@ -94,6 +110,10 @@ export const mutations = {
   },
   sortedWhenCreate(state) {
     state.listItems.sort((a, b)=> {
+      if (a.first === b.first) {
+        if (a.id > b.id) return -1
+        else if (a.id < b.id) return 1
+      }
       if (a.first < b.first) return 1
       else if (a.first > b.first) return -1
       else return 0

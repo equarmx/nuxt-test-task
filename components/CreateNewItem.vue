@@ -46,6 +46,7 @@
             class="wrapper-content-item-input-wrapper__textarea"
             placeholder="Введите описание товара"
             v-model.trim="newItem.description.value"
+            maxlength="120"
           ></textarea>
           </div>
         </div>
@@ -92,6 +93,7 @@
               :class="{invalid: newItem.price.isTouched || $v.newItem.price.value.$error}"
               @focusout="onTouch('price')"
               @keyup="disableTouch('price')"
+              v-mask="division"
             >
             <template v-if="$v.newItem.src.value.$error || newItem.price.isTouched">
               <small
@@ -131,9 +133,14 @@
 
 <script>
 import {required, maxLength} from "vuelidate/lib/validators"
+import {mask} from 'v-mask'
 
-const isNumber = (value) => /^\+?[0-9]+$/.test(value);
+const isNumber = (value) => /^\+?[0-9 ]+$/.test(value);
 const isURL = (value) => /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g.test(value);
+
+const DICIMAL_MASK = '# ###';
+const HUNDRED_MASK = '## ###';
+const DEFAULT_MASK = '### ### ###';
 
 export default {
   name: "createNewItem",
@@ -146,7 +153,7 @@ export default {
         value: {required, url: isURL},
       },
       price: {
-        value: {required, maxLength: maxLength(10), number: isNumber},
+        value: {required, maxLength: maxLength(12), number: isNumber},
       },
     },
     validationGroup: ['newItem.name.value', 'newItem.src.value', 'newItem.price.value']
@@ -176,6 +183,23 @@ export default {
   created() {
     this.isMobile = this.$device.isMobile
   },
+  computed: {
+    division() {
+      switch (this.isCount) {
+        case 'decimal':
+          return DICIMAL_MASK
+        case 'hundred':
+          return HUNDRED_MASK
+        case 'default':
+          return DEFAULT_MASK
+      }
+    },
+    isCount() {
+      if (this.newItem.price.value.length === 4) return 'decimal'
+      else if (this.newItem.price.value.length === 6) return 'hundred'
+      else if (this.newItem.price.value.length > 6) return 'default'
+    }
+  },
   methods: {
     onSubmit() {
       if (this.$v.$invalid) {
@@ -187,6 +211,7 @@ export default {
         this.newItem[key].value = ''
       }
       this.$v.$reset()
+      this.$emit('close')
     },
     onTouch(item) {
       if (!this.newItem[item].value) {

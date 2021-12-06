@@ -1,6 +1,6 @@
 <template>
   <div class="card" :class="{removed: productData.animation}">
-    <div class="card-image">
+    <div class="card-image" :class="{mobileResize: isMobile}">
       <div class="card-delete" :class="{visible: isMobile}" @click.prevent="deleteItem(productData.id)">
         <img src="~/assets/images/delete.svg">
       </div>
@@ -84,6 +84,10 @@ export default {
       }
     }
 
+    .mobileResize {
+      width: 332px;
+    }
+
     .card-image {
       display: flex;
       align-content: center;
@@ -150,6 +154,10 @@ export default {
           font-size: 1.13em;
           line-height: 20px;
           color: #3F3F3F;
+          white-space: normal;
+          word-wrap: break-word;
+          text-overflow: ellipsis;
+          overflow: hidden;
         }
         &__price {
           font-style: normal;
