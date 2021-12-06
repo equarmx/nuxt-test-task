@@ -116,7 +116,6 @@ export default {
 .wrapper {
   max-width: 332px;
   min-width: 200px;
-  //height: 440px;
   background: #fffefb;
   font-size: 10px;
   line-height: 13px;
