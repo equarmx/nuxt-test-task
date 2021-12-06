@@ -57,7 +57,9 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('callSetListItems')
+    if (process.server) {
+      this.$store.dispatch('nuxtServerInit')
+    }
   },
 }
 </script>

@@ -17,6 +17,12 @@ export default {
   created() {
     this.component = this.$device.isMobile ? 'Mobile' : 'Desktop'
   },
+  mounted() {
+    this.$store.dispatch('callSetToTheStorage')
+    if (process.client) {
+      this.$store.dispatch('callGetListFromStorage')
+    }
+  }
 }
 </script>
 

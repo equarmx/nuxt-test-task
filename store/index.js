@@ -1,5 +1,3 @@
-import animation from "ant-design-vue/lib/_util/openAnimation";
-
 function SetStartList(name, id, description, src, price, first, animation) {
   this.name = name;
   this.id = id;
@@ -45,7 +43,7 @@ export const mutations = {
     for (let i = 0; i < 30; i++) {
       state.listItems.push(new SetStartList(
         'Наименование товара',
-        i+1,
+        state.listItems.length+1,
         'Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк',
         'itemImg.jpg',
         '10000',
@@ -113,24 +111,63 @@ export const mutations = {
     })
     state.listItems[index].animation = true
   },
+  setToTheStorage(state) {
+    if (process.client) {
+      if (!sessionStorage.length) {
+        sessionStorage.setItem('list', JSON.stringify(state.listItems))
+      }
+    }
+  },
+  setStorageByNewItem(state) {
+    if (process.client) {
+      sessionStorage.setItem('list', JSON.stringify(state.listItems))
+    }
+  },
+  getListFromStorage(state) {
+    if (process.client) {
+      if (sessionStorage.length) {
+        state.listItems = JSON.parse(sessionStorage.getItem('list'))
+      }
+    }
+  }
 }
 
 export const actions = {
+  async nuxtServerInit ({dispatch}) {
+    await dispatch('callSetListItems')
+  },
   callSetListItems({commit}, arr) {
     commit('setListItems', arr)
+  },
+  callSetToTheStorage({commit}) {
+    commit('setToTheStorage')
   },
   callSetSelected({commit}, obj) {
     commit('setSelected', obj)
     commit('sortListItems', obj.value)
   },
-  callCreateNewElem({commit}, obj) {
-    commit('createNewElem', obj)
-    commit('sortedWhenCreate')
+  async callCreateNewElem({commit}, obj) {
+    try {
+      commit('createNewElem', obj)
+      commit('sortedWhenCreate')
+      commit('setStorageByNewItem')
+    } catch (err) {
+      throw new Error('Внутреняя ошибка сервера, сообщите администратору')
+    }
   },
   callDeleteElement({commit}, id) {
     commit('addDeleteAnimation', id)
     setTimeout(() => {
         commit('deleteElement', id)
+        if (process.client) {
+          commit('setStorageByNewItem')
+        }
     }, 400)
   },
+  callGetListFromStorage({commit}) {
+    commit('getListFromStorage')
+    setTimeout(() => {
+      commit('sortedWhenCreate')
+    }, 700)
+  }
 }

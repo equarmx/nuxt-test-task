@@ -34,7 +34,9 @@ export default {
     Selector,
   },
   mounted() {
-    this.$store.dispatch('callSetListItems')
+    if (process.server) {
+      this.$store.dispatch('nuxtServerInit')
+    }
   },
 }
 </script>

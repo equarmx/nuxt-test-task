@@ -178,7 +178,6 @@ export default {
   },
   methods: {
     onSubmit() {
-      console.log(this.$v.$invalid)
       if (this.$v.$invalid) {
         this.$v.$touch();
         return;
