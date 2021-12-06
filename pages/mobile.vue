@@ -84,7 +84,7 @@ export default {
         if (this.$store.state.loader) {
           this.isLoad = true
           setTimeout(() => {
-            this.$store.commit('setLoader')
+            this.$store.commit('setLoader', false)
             this.isLoad = false
           }, 1500)
         }

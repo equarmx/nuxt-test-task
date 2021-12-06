@@ -55,6 +55,7 @@ export default {
       this.show = !this.show
     },
     onSelect(item) {
+      this.$store.commit('setLoader', true)
       this.$store.dispatch('callSetSelected', item)
     }
   }
