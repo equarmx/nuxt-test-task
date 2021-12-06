@@ -32,13 +32,13 @@
       <div class="wrapper-selector">
         <Selector/>
       </div>
-      <div class="wrapper-content__listItems">
+      <transition-group name="list" tag="p" class="wrapper-content__listItems">
         <ItemCard
           v-for="item in $store.state.listItems"
           :key="item.id"
           :productData="item"
         />
-      </div>
+      </transition-group>
     </div>
   </div>
 </template>
@@ -63,6 +63,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.list-enter-active, .list-leave-active {
+  transition: all 1s;
+}
+.list-enter, .list-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
 .wrapper {
   -webkit-tap-highlight-color: transparent;
 

@@ -10,13 +10,13 @@
       <div class="wrapper-content__form">
         <create-new-item/>
       </div>
-      <div class="wrapper-content__listItems">
+      <transition-group name="list" tag="p" class="wrapper-content__listItems">
         <item-card
           v-for="item in $store.state.listItems"
           :key="item.id"
           :productData="item"
         />
-      </div>
+      </transition-group>
     </div>
   </div>
 </template>
@@ -50,6 +50,14 @@ export default {
   .wrapper-content__listItems {
     grid-template-columns: auto !important;
   }
+}
+
+.list-enter-active, .list-leave-active {
+  transition: all 1s;
+}
+.list-enter, .list-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
 }
 
 .wrapper {
