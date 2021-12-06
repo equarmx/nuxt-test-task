@@ -14,7 +14,6 @@ export const state = () => ({
   listItems: [],
   selected: {},
   numOfCreated: 0,
-  deleteAnimation: false,
 })
 
 export const mutations = {
