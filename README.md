@@ -26,3 +26,6 @@ For detailed explanation on how things work, check out the [documentation](https
 
 [Тестовое задание](https://frontend-test.idalite.com/)
 
+## Переключение на мобильную версию
+
+Необходимо после смены устройства обновить страницу
