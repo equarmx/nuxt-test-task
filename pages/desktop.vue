@@ -79,13 +79,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@media (max-width: 992px) {
+@media (max-width: 1345px) {
   .wrapper-content__listItems {
     grid-template-columns: auto auto !important;
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1000px) {
   .wrapper-content__listItems {
     grid-template-columns: auto !important;
   }

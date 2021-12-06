@@ -17,17 +17,21 @@
             <path fill="currentColor" d="M20 14H14V20H10V14H4V10H10V4H14V10H20V14Z" />
           </svg>
         </button>
-        <div
-          v-if="showModal"
-          class="wrapper-content-form-container"
-        >
-          <div class="wrapper-content-form-container__wrapper">
-            <create-new-item
-              v-if="showModal"
-              @close="showModal = false"
-            />
+        <transition name="fade" appear>
+          <div
+            v-if="showModal"
+            class="wrapper-content-form-container"
+          >
+            <div class="wrapper-content-form-container__wrapper">
+              <transition name="pop" appear>
+                <create-new-item
+                  v-if="showModal"
+                  @close="showModal = false"
+                />
+              </transition>
+            </div>
           </div>
-        </div>
+        </transition>
       </div>
       <div class="wrapper-selector">
         <Selector/>
@@ -95,6 +99,27 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity .4s linear;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.pop-enter-active,
+.pop-leave-active {
+  transition: transform 0.4s cubic-bezier(0.5, 0, 0.5, 1), opacity 0.4s linear;
+}
+
+.pop-enter,
+.pop-leave-to {
+  opacity: 0;
+  transform: scale(0.3) translateY(-50%);
+}
+
 .list-enter-active, .list-leave-active {
   transition: all 1s;
 }
