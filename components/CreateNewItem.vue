@@ -119,7 +119,7 @@
           </button>
           <button
             class="wrapper-content-bottom__btn"
-            :class="{widthBtn: isMobile, isSuccess: newItem.name.value && newItem.src.value && newItem.price.value}"
+            :class="{widthBtn: isMobile, isSuccess: newItem.name.value && newItem.src.value && newItem.price.value && !$v.$anyError}"
             type="submit"
           >
             Добавить товар
@@ -178,6 +178,7 @@ export default {
   },
   methods: {
     onSubmit() {
+      console.log(this.$v.$invalid)
       if (this.$v.$invalid) {
         this.$v.$touch();
         return;
