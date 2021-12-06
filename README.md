@@ -1,4 +1,3 @@
-# nuxt-test-task
 
 ## Build Setup
 
@@ -21,3 +20,9 @@ For detailed explanation on how things work, check out the [documentation](https
 
 
 ## NUXT TEST-TASK FOR IDAPROJECT
+
+
+[Ссылка на макет](https://www.figma.com/file/kIuVw6nSk218pi9iE98iq5/Junior-frontend-developer-test?node-id=0%3A1)
+
+[Тестовое задание](https://frontend-test.idalite.com/)
+
