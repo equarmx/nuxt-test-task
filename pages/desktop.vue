@@ -10,7 +10,7 @@
       <div class="wrapper-content__form">
         <create-new-item/>
       </div>
-      <transition-group name="list" tag="p" class="wrapper-content__listItems">
+      <transition-group name="list" class="wrapper-content__listItems">
         <item-card
           v-for="item in $store.state.listItems"
           :key="item.id"
@@ -35,7 +35,15 @@ export default {
   },
   mounted() {
     if (process.server) {
-      this.$store.dispatch('nuxtServerInit')
+      console.log('server')
+      this.$store.dispatch('nuxtServerInit').then(() => {
+        this.$store.dispatch('callGetListFromStorage')
+      })
+    } else {
+      console.log('client')
+      this.$store.dispatch('callSetListItems').then(() => {
+        this.$store.dispatch('callGetListFromStorage')
+      })
     }
   },
 }

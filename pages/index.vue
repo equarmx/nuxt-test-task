@@ -19,9 +19,6 @@ export default {
   },
   mounted() {
     this.$store.dispatch('callSetToTheStorage')
-    if (process.client) {
-      this.$store.dispatch('callGetListFromStorage')
-    }
   }
 }
 </script>

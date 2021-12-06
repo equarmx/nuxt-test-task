@@ -56,7 +56,6 @@ export default {
     },
     onSelect(item) {
       this.$store.dispatch('callSetSelected', item)
-      // this.selectedItem = Object.assign({}, item)
     }
   }
 }

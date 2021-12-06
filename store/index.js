@@ -40,6 +40,7 @@ export const mutations = {
     })
   },
   setListItems(state) {
+    state.listItems = []
     for (let i = 0; i < 30; i++) {
       state.listItems.push(new SetStartList(
         'Наименование товара',
@@ -128,6 +129,7 @@ export const mutations = {
   getListFromStorage(state) {
     if (process.client) {
       if (sessionStorage.length) {
+        state.listItems = []
         state.listItems = JSON.parse(sessionStorage.getItem('list'))
       }
     }
@@ -136,10 +138,10 @@ export const mutations = {
 
 export const actions = {
   async nuxtServerInit ({dispatch}) {
-    await dispatch('callSetListItems')
+    dispatch('callSetListItems')
   },
-  callSetListItems({commit}, arr) {
-    commit('setListItems', arr)
+  async callSetListItems({commit}, arr) {
+    await commit('setListItems', arr)
   },
   callSetToTheStorage({commit}) {
     commit('setToTheStorage')

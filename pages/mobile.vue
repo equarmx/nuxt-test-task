@@ -32,7 +32,7 @@
       <div class="wrapper-selector">
         <Selector/>
       </div>
-      <transition-group name="list" tag="p" class="wrapper-content__listItems">
+      <transition-group name="list" class="wrapper-content__listItems">
         <ItemCard
           v-for="item in $store.state.listItems"
           :key="item.id"
@@ -58,7 +58,13 @@ export default {
   },
   mounted() {
     if (process.server) {
-      this.$store.dispatch('nuxtServerInit')
+      this.$store.dispatch('nuxtServerInit').then(() => {
+        this.$store.dispatch('callGetListFromStorage')
+      })
+    } else {
+      this.$store.dispatch('callSetListItems').then(() => {
+        this.$store.dispatch('callGetListFromStorage')
+      })
     }
   },
 }
