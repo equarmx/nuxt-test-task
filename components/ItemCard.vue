@@ -7,16 +7,13 @@
       <img
         v-if="productData.src === 'itemImg.jpg'"
         :src="require(`~/assets/images/${productData.src}`)"
-        class="card-image__img"
-      >
-      <img
-        v-else-if="!productData.src"
-        :src="require(`~/assets/images/default.jpg`)"
+        @error="replaceByDefault"
         class="card-image__img"
       >
       <img
         v-else
         :src="`${productData.src}`"
+        @error="replaceByDefault"
         class="card-image__img"
       >
     </div>
@@ -54,6 +51,9 @@ export default {
   methods: {
     deleteItem(id) {
       this.$store.dispatch('callDeleteElement', id)
+    },
+    replaceByDefault(e) {
+      e.target.src = require(`~/assets/images/default.jpg`)
     },
   },
 }

@@ -85,11 +85,11 @@ export const mutations = {
   createNewElem(state, obj) {
     let number = state.numOfCreated += 1
     state.listItems.push(new SetStartList(
-      obj.name,
+      obj.name.value,
       state.listItems.length+1,
-      obj.description,
-      obj.src,
-      obj.price,
+      obj.description.value,
+      obj.src.value,
+      obj.price.value,
       number.toString(),
       false,
     ))
@@ -124,6 +124,7 @@ export const actions = {
     commit('sortListItems', obj.value)
   },
   callCreateNewElem({commit}, obj) {
+    console.log('what')
     commit('createNewElem', obj)
     commit('sortedWhenCreate')
   },

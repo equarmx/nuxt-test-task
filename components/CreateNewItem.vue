@@ -14,14 +14,25 @@
           </span>
             <img src="~/assets/images/Rectangle_32.svg" alt="*" style="color: red">
           </div>
-
           <div class="wrapper-content-item-input-wrapper">
             <input
               class="wrapper-content-item-input-wrapper__input"
               placeholder="Введите наименование товара"
-              v-model.trim="newItem.name"
-              :class="{invalid: $v.name.$dirty && (!$v.name.required || !$v.name.maxLength)}"
+              v-model.trim="newItem.name.value"
+              :class="{invalid: newItem.name.isTouched || $v.newItem.name.value.$error}"
+              @focusout="onTouch('name')"
+              @keyup="disableTouch('name')"
             >
+            <template v-if="$v.newItem.name.value.$error || newItem.name.isTouched">
+              <small
+                v-if="!$v.newItem.name.value.required || newItem.name.isTouched"
+              >Поле является обязательным
+              </small>
+              <small
+                v-else-if="!$v.newItem.name.value.maxLength"
+              >Необходимо ввести не более 25 символов
+              </small>
+            </template>
           </div>
         </div>
         <div class="wrapper-content-item">
@@ -34,7 +45,7 @@
           <textarea
             class="wrapper-content-item-input-wrapper__textarea"
             placeholder="Введите описание товара"
-            v-model.trim="newItem.description"
+            v-model.trim="newItem.description.value"
           ></textarea>
           </div>
         </div>
@@ -49,9 +60,21 @@
             <input
               class="wrapper-content-item-input-wrapper__input"
               placeholder="Введите ссылку"
-              v-model.trim="newItem.src"
-              :class="{invalid: $v.src.$dirty && (!$v.src.required || !$v.src.maxLength)}"
+              v-model.trim="newItem.src.value"
+              :class="{invalid: newItem.src.isTouched || $v.newItem.src.value.$error}"
+              @focusout="onTouch('src')"
+              @keyup="disableTouch('src')"
             >
+            <template v-if="$v.newItem.src.value.$error || newItem.src.isTouched">
+              <small
+                v-if="!$v.newItem.src.value.required || newItem.src.isTouched"
+              >Поле является обязательным
+              </small>
+              <small
+                v-else-if="!$v.newItem.src.value.url"
+              >Введите коректный URL
+              </small>
+            </template>
           </div>
         </div>
         <div class="wrapper-content-item">
@@ -65,8 +88,25 @@
             <input
               class="wrapper-content-item-input-wrapper__input"
               placeholder="Введите цену"
-              v-model.trim="newItem.price"
+              v-model.trim="newItem.price.value"
+              :class="{invalid: newItem.price.isTouched || $v.newItem.price.value.$error}"
+              @focusout="onTouch('price')"
+              @keyup="disableTouch('price')"
             >
+            <template v-if="$v.newItem.src.value.$error || newItem.price.isTouched">
+              <small
+                v-if="!$v.newItem.price.value.required || newItem.price.isTouched"
+              >Поле является обязательным
+              </small>
+              <small
+                v-else-if="!$v.newItem.price.value.maxLength"
+              >Необходимо ввести не более 10 символов
+              </small>
+              <small
+                v-else-if="!$v.newItem.price.value.number"
+              >Поле должно включать только цифры
+              </small>
+            </template>
           </div>
         </div>
         <div class="wrapper-content-bottom" :class="{mobileStructure: isMobile}">
@@ -79,10 +119,9 @@
           </button>
           <button
             class="wrapper-content-bottom__btn"
-            :class="{widthBtn: isMobile}"
+            :class="{widthBtn: isMobile, isSuccess: newItem.name.value && newItem.src.value && newItem.price.value}"
             type="submit"
           >
-<!--            @click.prevent="onSubmit()"-->
             Добавить товар
           </button>
         </div>
@@ -99,18 +138,38 @@ const isURL = (value) => /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}
 export default {
   name: "createNewItem",
   validations: {
-    name: {required, maxLength: maxLength(25)},
-    src: {required, url: isURL()},
-    price:{required, maxLength: maxLength(25), number: isNumber()},
+    newItem: {
+      name: {
+        value: {required, maxLength: maxLength(25)},
+        },
+      src: {
+        value: {required, url: isURL},
+      },
+      price: {
+        value: {required, maxLength: maxLength(10), number: isNumber},
+      },
+    },
+    validationGroup: ['newItem.name.value', 'newItem.src.value', 'newItem.price.value']
   },
   data() {
     return {
       isMobile: false,
       newItem: {
-        name: '',
-        description: '',
-        src: '',
-        price: '',
+        name: {
+          value: '',
+          isTouched: false,
+        },
+        description: {
+          value: '',
+        },
+        src: {
+          value: '',
+          isTouched: false,
+        },
+        price: {
+          value: '',
+          isTouched: false,
+        },
       },
     }
   },
@@ -120,14 +179,25 @@ export default {
   methods: {
     onSubmit() {
       if (this.$v.$invalid) {
-        this.$v.$touch()
-        return
+        this.$v.$touch();
+        return;
       }
       this.$store.dispatch('callCreateNewElem', this.newItem)
       for (let key in this.newItem) {
-        this.newItem[key] = ''
+        this.newItem[key].value = ''
       }
-    }
+      this.$v.$reset()
+    },
+    onTouch(item) {
+      if (!this.newItem[item].value) {
+        this.newItem[item].isTouched = true
+      } else this.newItem[item].isTouched = false
+    },
+    disableTouch(item) {
+      if (this.newItem[item].value) {
+        this.newItem[item].isTouched = false
+      } else this.newItem[item].isTouched = true
+    },
   },
 }
 </script>
@@ -137,7 +207,7 @@ export default {
   margin: 0 auto;
 }
 .wrapper {
-  max-width: 332px;
+  width: 332px;
   min-width: 200px;
   background: #fffefb;
   font-size: 10px;
@@ -169,7 +239,6 @@ export default {
         color: white;
         opacity: 1;
       }
-
       &__btn {
         width: 100%;
         height: 36px;
@@ -180,9 +249,21 @@ export default {
         font-size: 0.9rem;
         color: #B4B4B4;
         opacity: 1;
+        pointer-events:none;
       }
       .widthBtn {
         width: unset;
+      }
+      .isSuccess {
+        pointer-events: unset;
+        background: #7BAE73;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        color: #FFFFFF;
+        cursor: pointer;
+
+        &:hover {
+          background: lighten(#7BAE73, 5%);
+        }
       }
     }
 
@@ -211,6 +292,11 @@ export default {
 
         .invalid {
           border-color:  #FF8484;
+
+          &:focus {
+            background: #FFFF;
+            border-color:  #FF8484;
+          }
         }
 
         input {
@@ -223,7 +309,7 @@ export default {
           border-radius: 4px;
           text-indent: 1.15rem;
           outline: none;
-          transition: background 0.25s ease-in-out, border-bottom 0.25s ease-in-out;
+          transition: background 0.25s ease-in-out, border-bottom 0.25s ease-in-out, border-color 0.25s ease-in-out;
           line-height: 15px;
 
           &:focus {
@@ -282,6 +368,12 @@ export default {
             font-size: 0.85rem;
             color: #B4B4B4;
           }
+        }
+        small {
+          color: #FF8484;
+          font-size: 8px;
+          line-height: 10px;
+          letter-spacing: -0.02em;
         }
       }
     }
