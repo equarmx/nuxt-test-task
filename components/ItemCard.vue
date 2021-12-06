@@ -7,14 +7,17 @@
       <img
         v-if="productData.src === 'itemImg.jpg'"
         :src="require(`~/assets/images/${productData.src}`)"
+        class="card-image__img"
       >
       <img
         v-else-if="!productData.src"
         :src="require(`~/assets/images/default.jpg`)"
+        class="card-image__img"
       >
       <img
         v-else
         :src="`${productData.src}`"
+        class="card-image__img"
       >
     </div>
     <div class="card-info">
@@ -83,9 +86,20 @@ export default {
 
     .card-image {
       display: flex;
-      flex-direction: column;
+      align-content: center;
+      justify-content: center;
+      align-items: center;
       position: relative;
+      height: 200px;
+      max-width: 332px;
 
+      &__img {
+        width: 100%;
+        height: 100%;
+        margin: 0 auto;
+        object-fit: cover;
+        -o-object-fit: cover;
+      }
       .card-delete {
         width: 32px;
         height: 32px;
