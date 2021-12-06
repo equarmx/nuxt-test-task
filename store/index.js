@@ -12,6 +12,7 @@ export const state = () => ({
   selected: {},
   numOfCreated: 0,
   counterId: 0,
+  loader: false
 })
 
 export const mutations = {
@@ -22,9 +23,6 @@ export const mutations = {
     state.listItems.sort((a, b)=> {
       if (value === 'default') {
         return b.first - a.first || a.id - b.id
-        // if (a.id > b.id) return 1
-        // else if (a.id < b.id) return -1
-        // else return 0
       } else if (value === 'min') {
         if (Number(a.price.replace(/\s/g, "")) > Number(b.price.replace(/\s/g, ""))) return 1
         else if (Number(a.price.replace(/\s/g, "")) < Number(b.price.replace(/\s/g, ""))) return -1
@@ -78,7 +76,11 @@ export const mutations = {
     ))
     state.counterId = state.listItems.length
   },
+  setLoader(state, value) {
+    state.loader = value
+  },
   createNewElem(state, obj) {
+    console.log(obj)
     let number = state.numOfCreated += 1
     state.listItems.push(new SetStartList(
       obj.name.value,
@@ -108,12 +110,6 @@ export const mutations = {
     })
     if (index !== -1) state.listItems.splice(index, 1)
   },
-  addDeleteAnimation(state, id) {
-    let index = state.listItems.findIndex(i => {
-      return i.id === id
-    })
-    state.listItems[index].animation = true
-  },
   setToTheStorage(state) {
     if (process.client) {
       if (!sessionStorage.length) {
@@ -130,7 +126,9 @@ export const mutations = {
     if (process.client) {
       if (sessionStorage.length) {
         state.listItems = []
+        console.log(JSON.parse(sessionStorage.getItem('list')))
         state.listItems = JSON.parse(sessionStorage.getItem('list'))
+        state.counterId = state.listItems.length
       }
     }
   }
@@ -141,7 +139,7 @@ export const actions = {
     dispatch('callSetListItems')
   },
   async callSetListItems({commit}, arr) {
-    await commit('setListItems', arr)
+    commit('setListItems', arr)
   },
   callSetToTheStorage({commit}) {
     commit('setToTheStorage')
@@ -152,6 +150,7 @@ export const actions = {
   },
   async callCreateNewElem({commit}, obj) {
     try {
+      commit('setLoader', true)
       commit('createNewElem', obj)
       commit('sortedWhenCreate')
       commit('setStorageByNewItem')

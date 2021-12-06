@@ -10,13 +10,18 @@
       <div class="wrapper-content__form">
         <create-new-item/>
       </div>
-      <transition-group name="list" class="wrapper-content__listItems">
-        <item-card
-          v-for="item in $store.state.listItems"
-          :key="item.id"
-          :productData="item"
-        />
-      </transition-group>
+      <template v-if="!isLoad">
+        <transition-group name="list" class="wrapper-content__listItems">
+          <item-card
+            v-for="item in $store.state.listItems"
+            :key="item.id"
+            :productData="item"
+          />
+        </transition-group>
+      </template>
+      <loader
+        v-else
+      />
     </div>
   </div>
 </template>
@@ -24,16 +29,24 @@
 <script>
 import CreateNewItem from "../components/CreateNewItem";
 import Selector from "../components/Selector.vue";
-import ItemCard from "../components/ItemCard";
+import ItemCard from "../components/ItemCard.vue";
+import Loader from "../components/Loader.vue"
 
 export default {
   name: "desktop.vue",
   components: {
+    Loader,
     ItemCard,
     CreateNewItem,
     Selector,
   },
+  data() {
+    return {
+      isLoad: false,
+    }
+  },
   mounted() {
+    this.isLoad = true
     if (process.server) {
       console.log('server')
       this.$store.dispatch('nuxtServerInit').then(() => {
@@ -44,6 +57,22 @@ export default {
       this.$store.dispatch('callSetListItems').then(() => {
         this.$store.dispatch('callGetListFromStorage')
       })
+    }
+    setTimeout(() => {
+      this.isLoad = false
+    }, 1500)
+  },
+  watch: {
+    "$store.state.loader": {
+      handler: function watch() {
+        if (this.$store.state.loader) {
+          this.isLoad = true
+          setTimeout(() => {
+            this.$store.commit('setLoader')
+            this.isLoad = false
+          }, 1500)
+        }
+      }
     }
   },
 }
