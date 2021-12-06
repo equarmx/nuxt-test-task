@@ -124,7 +124,6 @@ export const actions = {
     commit('sortListItems', obj.value)
   },
   callCreateNewElem({commit}, obj) {
-    console.log('what')
     commit('createNewElem', obj)
     commit('sortedWhenCreate')
   },
