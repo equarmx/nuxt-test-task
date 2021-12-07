@@ -1,7 +1,7 @@
 <template>
   <div class="card">
-    <div class="card-image" :class="{resizeImg: isMobile}">
-      <div class="card-delete" :class="{visible: isMobile}" @click.prevent="deleteItem(productData.id)">
+    <div class="card-image" :class="{resizeImg: $store.state.isMobile}">
+      <div class="card-delete" :class="{visible: $store.state.isMobile}" @click.prevent="deleteItem(productData.id)">
         <img src="~/assets/images/delete.svg">
       </div>
       <img
@@ -39,14 +39,6 @@ export default {
       type: Object,
       default: () => ({})
     }
-  },
-  data() {
-    return {
-      isMobile: false,
-    }
-  },
-  created() {
-    this.isMobile = this.$device.isMobile
   },
   methods: {
     deleteItem(id) {

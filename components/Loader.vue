@@ -1,5 +1,5 @@
 <template>
-  <div class="loader" :class="{resizeLoader: isMobile}">
+  <div class="loader" :class="{resizeLoader: $store.state.isMobile}">
     <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
   </div>
 </template>
@@ -7,14 +7,6 @@
 <script>
 export default {
   name: "Loader.vue",
-  data() {
-    return {
-      isMobile: false,
-    }
-  },
-  created() {
-    this.isMobile = this.$device.isMobile
-  },
 }
 </script>
 

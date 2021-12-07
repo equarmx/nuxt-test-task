@@ -16,6 +16,7 @@ export default {
   },
   created() {
     this.component = this.$device.isMobile ? 'Mobile' : 'Desktop'
+    this.$store.commit('setIsMobile', this.$device.isMobile)
   },
   mounted() {
     this.$store.dispatch('callSetToTheStorage')

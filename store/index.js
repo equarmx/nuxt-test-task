@@ -12,7 +12,8 @@ export const state = () => ({
   selected: {},
   numOfCreated: 0,
   counterId: 0,
-  loader: false
+  loader: false,
+  isMobile: false,
 })
 
 export const mutations = {
@@ -111,7 +112,7 @@ export const mutations = {
   },
   setToTheStorage(state) {
     if (process.client) {
-      if (!sessionStorage.length) {
+      if (!sessionStorage.hasOwnProperty('list')) {
         sessionStorage.setItem('list', JSON.stringify(state.listItems))
       }
     }
@@ -123,12 +124,15 @@ export const mutations = {
   },
   getListFromStorage(state) {
     if (process.client) {
-      if (sessionStorage.length) {
+      if (sessionStorage.hasOwnProperty('list')) {
         state.listItems = []
         state.listItems = JSON.parse(sessionStorage.getItem('list'))
         state.counterId = state.listItems.length
       }
     }
+  },
+  setIsMobile(state, value) {
+    state.isMobile = value
   }
 }
 
@@ -143,6 +147,7 @@ export const actions = {
     commit('setToTheStorage')
   },
   callSetSelected({commit}, obj) {
+    commit('setLoader', true)
     commit('setSelected', obj)
     commit('sortListItems', obj.value)
   },
@@ -169,5 +174,8 @@ export const actions = {
     setTimeout(() => {
       commit('sortedWhenCreate')
     }, 700)
+  },
+  callSetIsMobile({commit}, value) {
+    commit('setIsMobile', value)
   }
 }

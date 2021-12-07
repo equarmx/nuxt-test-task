@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" :class="{wrapperMobile: isMobile}">
+  <div class="wrapper" :class="{wrapperMobile: $store.state.isMobile}">
       <form
         class="wrapper-content"
         action="#"
@@ -111,9 +111,9 @@
             </template>
           </div>
         </div>
-        <div class="wrapper-content-bottom" :class="{mobileStructure: isMobile}">
+        <div class="wrapper-content-bottom" :class="{mobileStructure: $store.state.isMobile}">
           <button
-            v-if="isMobile"
+            v-if="$store.state.isMobile"
             @click="$emit('close')"
             class="wrapper-content-bottom__close"
           >
@@ -121,7 +121,7 @@
           </button>
           <button
             class="wrapper-content-bottom__btn"
-            :class="{widthBtn: isMobile, isSuccess: newItem.name.value && newItem.src.value && newItem.price.value && !$v.$anyError}"
+            :class="{widthBtn: $store.state.isMobile, isSuccess: newItem.name.value && newItem.src.value && newItem.price.value && !$v.$anyError}"
             type="submit"
           >
             Добавить товар
@@ -136,7 +136,7 @@ import {required, maxLength} from "vuelidate/lib/validators"
 import {mask} from 'v-mask'
 
 const isNumber = (value) => /^\+?[0-9 ]+$/.test(value);
-const isURL = (value) => /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g.test(value);
+const isURL = (value) => /(http(s)?:\/\/.)(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g.test(value);
 
 const DICIMAL_MASK = '# ###';
 const HUNDRED_MASK = '## ###';
@@ -160,7 +160,6 @@ export default {
   },
   data() {
     return {
-      isMobile: false,
       newItem: {
         name: {
           value: '',
@@ -179,9 +178,6 @@ export default {
         },
       },
     }
-  },
-  created() {
-    this.isMobile = this.$device.isMobile
   },
   computed: {
     division() {
