@@ -80,7 +80,6 @@ export const mutations = {
     state.loader = value
   },
   createNewElem(state, obj) {
-    console.log(obj)
     let number = state.numOfCreated += 1
     state.listItems.push(new SetStartList(
       obj.name.value,
@@ -126,7 +125,6 @@ export const mutations = {
     if (process.client) {
       if (sessionStorage.length) {
         state.listItems = []
-        console.log(JSON.parse(sessionStorage.getItem('list')))
         state.listItems = JSON.parse(sessionStorage.getItem('list'))
         state.counterId = state.listItems.length
       }
