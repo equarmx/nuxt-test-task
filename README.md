@@ -1,3 +1,9 @@
+## Clone repo
+
+$ git clone git://github.com/equarmx/nuxt-test-task
+OR
+$ git clone https://github.com/equarmx/nuxt-test-task
+
 
 ## Build Setup
 
