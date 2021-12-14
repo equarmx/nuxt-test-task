@@ -1,5 +1,3 @@
-## Второй contributor в репозитории - это мой второй аккаунт с рабочего ПК 😂
-
 ## Clone repo
 
 $ git clone git://github.com/equarmx/nuxt-test-task <br />
